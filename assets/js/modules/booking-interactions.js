@@ -881,18 +881,18 @@ const NAWABookingInteractions = (function() {
         container.innerHTML = '<div class="bma-comparison-loading">Loading comparison...</div>';
 
         try {
-            // Fetch comparison data from API
-            const response = await fetch(nawaSettings.apiUrl + 'bookings/compare', {
+            // Fetch comparison data from AJAX endpoint
+            const response = await fetch(nawaSettings.ajaxUrl, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'X-WP-Nonce': nawaSettings.nonce
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: JSON.stringify({
+                body: new URLSearchParams({
+                    action: 'nawa_booking_compare',
+                    nonce: nawaSettings.nonce,
                     resos_booking_id: resosBookingId,
                     hotel_booking_id: bookingId,
-                    date: date,
-                    context: 'webapp-restaurant'
+                    date: date
                 })
             });
 

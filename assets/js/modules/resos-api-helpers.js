@@ -10,11 +10,16 @@
  */
 async function fetchOpeningHours(date) {
     try {
-        const response = await fetch(`${nawaSettings.apiUrl}opening-hours?date=${date}`, {
-            method: 'GET',
+        const response = await fetch(nawaSettings.ajaxUrl, {
+            method: 'POST',
             headers: {
-                'X-WP-Nonce': nawaSettings.nonce
-            }
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                action: 'nawa_opening_hours',
+                nonce: nawaSettings.nonce,
+                date: date
+            })
         });
         return await response.json();
     } catch (error) {
@@ -28,11 +33,15 @@ async function fetchOpeningHours(date) {
  */
 async function fetchDietaryChoices() {
     try {
-        const response = await fetch(`${nawaSettings.apiUrl}dietary-choices`, {
-            method: 'GET',
+        const response = await fetch(nawaSettings.ajaxUrl, {
+            method: 'POST',
             headers: {
-                'X-WP-Nonce': nawaSettings.nonce
-            }
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                action: 'nawa_dietary_choices',
+                nonce: nawaSettings.nonce
+            })
         });
         return await response.json();
     } catch (error) {
@@ -46,16 +55,23 @@ async function fetchDietaryChoices() {
  */
 async function fetchAvailableTimes(date, people, openingHourId) {
     try {
-        let url = `${nawaSettings.apiUrl}available-times?date=${date}&people=${people}`;
+        const params = {
+            action: 'nawa_available_times',
+            nonce: nawaSettings.nonce,
+            date: date,
+            people: people
+        };
+
         if (openingHourId) {
-            url += `&opening_hour_id=${openingHourId}`;
+            params.opening_hour_id = openingHourId;
         }
 
-        const response = await fetch(url, {
-            method: 'GET',
+        const response = await fetch(nawaSettings.ajaxUrl, {
+            method: 'POST',
             headers: {
-                'X-WP-Nonce': nawaSettings.nonce
-            }
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(params)
         });
         return await response.json();
     } catch (error) {
@@ -69,11 +85,16 @@ async function fetchAvailableTimes(date, people, openingHourId) {
  */
 async function fetchSpecialEvents(date) {
     try {
-        const response = await fetch(`${nawaSettings.apiUrl}special-events?date=${date}`, {
-            method: 'GET',
+        const response = await fetch(nawaSettings.ajaxUrl, {
+            method: 'POST',
             headers: {
-                'X-WP-Nonce': nawaSettings.nonce
-            }
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                action: 'nawa_special_events',
+                nonce: nawaSettings.nonce,
+                date: date
+            })
         });
         return await response.json();
     } catch (error) {
