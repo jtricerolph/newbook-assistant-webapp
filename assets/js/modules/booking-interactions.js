@@ -32,6 +32,9 @@ const NAWABookingInteractions = (function() {
             // Reinitialize interactions when content loads
             setTimeout(() => {
                 attachCardAccordions();
+                attachGanttTooltips();
+                attachGroupHoverHighlighting();
+                attachComparisonCheckboxListeners();
             }, 100);
         }
     }
@@ -140,6 +143,44 @@ const NAWABookingInteractions = (function() {
             event.preventDefault();
             event.stopPropagation();
             handleSectionToggle(sectionToggle);
+            return;
+        }
+
+        // ========== PHASE 3: ADVANCED FEATURES ==========
+
+        // Stat filters (Staying tab)
+        const statFilter = event.target.closest('.stat-filter');
+        if (statFilter) {
+            event.preventDefault();
+            event.stopPropagation();
+            handleStatFilter(statFilter);
+            return;
+        }
+
+        // Group management modal buttons
+        const groupModalBtn = event.target.closest('[data-action="manage-group"]');
+        if (groupModalBtn) {
+            event.preventDefault();
+            event.stopPropagation();
+            handleGroupManagementButton(groupModalBtn);
+            return;
+        }
+
+        // Close group modal
+        const closeGroupModal = event.target.closest('.close-group-modal');
+        if (closeGroupModal) {
+            event.preventDefault();
+            event.stopPropagation();
+            closeGroupManagementModal();
+            return;
+        }
+
+        // Save group configuration
+        const saveGroupBtn = event.target.closest('.save-group-config');
+        if (saveGroupBtn) {
+            event.preventDefault();
+            event.stopPropagation();
+            saveGroupConfiguration();
             return;
         }
     }
@@ -809,6 +850,484 @@ const NAWABookingInteractions = (function() {
                 feedbackElement.style.display = 'none';
             }, 3000);
         }
+    }
+
+    // ========== PHASE 3: ADVANCED FEATURE IMPLEMENTATIONS ==========
+
+    /**
+     * Attach Gantt chart tooltips
+     */
+    function attachGanttTooltips() {
+        // Create tooltip element if it doesn't exist
+        let tooltip = document.getElementById('gantt-booking-tooltip');
+        if (!tooltip) {
+            tooltip = document.createElement('div');
+            tooltip.id = 'gantt-booking-tooltip';
+            tooltip.className = 'gantt-booking-tooltip';
+            tooltip.style.cssText = 'position: fixed; display: none; z-index: 10000; background: #1f2937; color: white; padding: 8px 12px; border-radius: 6px; font-size: 13px; pointer-events: none; box-shadow: 0 4px 6px rgba(0,0,0,0.2);';
+            document.body.appendChild(tooltip);
+        }
+
+        // Attach event listeners to all booking bars
+        const bookingBars = document.querySelectorAll('.gantt-booking-bar');
+        bookingBars.forEach(bar => {
+            bar.addEventListener('mouseenter', (e) => {
+                const people = bar.getAttribute('data-people') || '?';
+                const name = bar.getAttribute('data-name') || 'Guest';
+                const isResident = bar.getAttribute('data-is-resident') === 'true';
+
+                // Format: "{people} pax {name} [hotel icon]"
+                let tooltipHTML = `${people} pax ${name}`;
+                if (isResident) {
+                    tooltipHTML += ' <span class="material-symbols-outlined" style="font-size: 14px; vertical-align: middle;">hotel</span>';
+                }
+
+                tooltip.innerHTML = tooltipHTML;
+                tooltip.style.display = 'block';
+            });
+
+            bar.addEventListener('mousemove', (e) => {
+                tooltip.style.left = (e.clientX + 10) + 'px';
+                tooltip.style.top = (e.clientY + 10) + 'px';
+            });
+
+            bar.addEventListener('mouseleave', () => {
+                tooltip.style.display = 'none';
+            });
+        });
+
+        console.log('NAWABookingInteractions: Gantt tooltips attached');
+    }
+
+    /**
+     * Attach group member hover highlighting
+     */
+    function attachGroupHoverHighlighting() {
+        // Handle restaurant-status group member hover (ResOS group highlighting)
+        document.querySelectorAll('.restaurant-status[data-resos-id]').forEach(statusElement => {
+            const resosId = statusElement.dataset.resosId;
+
+            if (!resosId) return;
+
+            statusElement.addEventListener('mouseenter', function() {
+                // Highlight all restaurant-status blocks with the same resos-id
+                document.querySelectorAll(`.restaurant-status[data-resos-id="${resosId}"]`).forEach(relatedStatus => {
+                    relatedStatus.classList.add('group-highlight');
+                });
+            });
+
+            statusElement.addEventListener('mouseleave', function() {
+                // Remove highlight from all restaurant-status blocks
+                document.querySelectorAll('.restaurant-status.group-highlight').forEach(highlightedStatus => {
+                    highlightedStatus.classList.remove('group-highlight');
+                });
+            });
+        });
+
+        console.log('NAWABookingInteractions: Group hover highlighting attached');
+    }
+
+    /**
+     * Attach comparison checkbox listeners
+     */
+    function attachComparisonCheckboxListeners() {
+        const checkboxes = document.querySelectorAll('.suggestion-checkbox');
+        checkboxes.forEach(checkbox => {
+            // Remove existing listeners
+            const newCheckbox = checkbox.cloneNode(true);
+            checkbox.parentNode.replaceChild(newCheckbox, checkbox);
+
+            // Set initial state
+            toggleComparisonVisualFeedback(newCheckbox);
+
+            // Add change event listener
+            newCheckbox.addEventListener('change', function() {
+                toggleComparisonVisualFeedback(this);
+            });
+        });
+
+        console.log('NAWABookingInteractions: Comparison checkbox listeners attached');
+    }
+
+    /**
+     * Toggle comparison visual feedback
+     */
+    function toggleComparisonVisualFeedback(checkbox) {
+        const field = checkbox.dataset.field;
+        const isChecked = checkbox.checked;
+        const container = checkbox.closest('.comparison-row-content');
+
+        if (container) {
+            // Toggle strikethrough on Resos value
+            const resosValue = container.querySelector(`.resos-value[data-field="${field}"]`);
+            if (resosValue) {
+                if (isChecked) {
+                    resosValue.style.textDecoration = 'line-through';
+                    resosValue.style.opacity = '0.6';
+                } else {
+                    resosValue.style.textDecoration = 'none';
+                    resosValue.style.opacity = '1';
+                }
+            }
+
+            // Toggle opacity on suggestion text
+            const suggestionText = container.querySelector(`.suggestion-text[data-field="${field}"]`);
+            if (suggestionText) {
+                if (isChecked) {
+                    suggestionText.style.opacity = '1';
+                } else {
+                    suggestionText.style.opacity = '0.5';
+                }
+            }
+        }
+    }
+
+    /**
+     * Handle stat filter click
+     */
+    function handleStatFilter(filter) {
+        const filterType = filter.dataset.filter;
+
+        // Restaurant filter has 3 modes: off -> has-match (green/tick) -> no-match (red/plus) -> off
+        if (filterType === 'restaurant') {
+            if (!window.activeStatFilter) {
+                // Off -> Show with matches (green)
+                console.log('NAWABookingInteractions: Filtering restaurant: has match');
+                filterStayingByStat('restaurant-has-match');
+            } else if (window.activeStatFilter === 'restaurant-has-match') {
+                // Has match -> Show without matches (red)
+                console.log('NAWABookingInteractions: Filtering restaurant: no match');
+                filterStayingByStat('restaurant-no-match');
+            } else {
+                // No match -> Off
+                console.log('NAWABookingInteractions: Clearing restaurant filter');
+                filterStayingByStat(null);
+            }
+        } else {
+            // Normal toggle behavior for other filters
+            if (window.activeStatFilter === filterType) {
+                console.log('NAWABookingInteractions: Clearing stat filter');
+                filterStayingByStat(null);
+            } else {
+                console.log('NAWABookingInteractions: Filtering by stat:', filterType);
+                filterStayingByStat(filterType);
+            }
+        }
+    }
+
+    /**
+     * Filter staying cards by stat
+     */
+    function filterStayingByStat(filterType) {
+        const cards = document.querySelectorAll('.staying-card');
+        const vacantRows = document.querySelectorAll('.vacant-room-line');
+
+        if (filterType === null) {
+            // Show all
+            cards.forEach(card => card.style.display = '');
+            vacantRows.forEach(row => row.style.display = '');
+            window.activeStatFilter = null;
+        } else {
+            // Filter based on type
+            cards.forEach(card => {
+                let shouldShow = false;
+
+                switch(filterType) {
+                    case 'arrivals':
+                        shouldShow = card.dataset.isArriving === 'true';
+                        break;
+                    case 'departs':
+                        shouldShow = card.dataset.isDeparting === 'true';
+                        break;
+                    case 'stopovers':
+                        shouldShow = card.dataset.isStopover === 'true';
+                        break;
+                    case 'in-house':
+                        shouldShow = true; // Show all booked rooms (vacant excluded below)
+                        break;
+                    case 'occupancy':
+                        shouldShow = true; // Show all booked rooms (vacant excluded below)
+                        break;
+                    case 'twins':
+                        shouldShow = card.dataset.hasTwin === 'true';
+                        break;
+                    case 'restaurant-has-match':
+                        shouldShow = card.dataset.hasRestaurantMatch === 'true';
+                        break;
+                    case 'restaurant-no-match':
+                        shouldShow = card.dataset.hasRestaurantMatch === 'false';
+                        break;
+                }
+
+                card.style.display = shouldShow ? '' : 'none';
+            });
+
+            // All filters exclude vacant rooms
+            vacantRows.forEach(row => row.style.display = 'none');
+
+            window.activeStatFilter = filterType;
+        }
+
+        updateStatFilterUI(filterType);
+    }
+
+    /**
+     * Update stat filter UI
+     */
+    function updateStatFilterUI(activeFilter) {
+        document.querySelectorAll('.stat-filter').forEach(filter => {
+            if (filter.dataset.filter === activeFilter) {
+                filter.classList.add('active');
+            } else {
+                filter.classList.remove('active');
+            }
+        });
+    }
+
+    /**
+     * Handle group management button click
+     */
+    function handleGroupManagementButton(button) {
+        const resosBookingId = button.dataset.resosBookingId;
+        const hotelBookingId = button.dataset.hotelBookingId;
+        const date = button.dataset.date;
+
+        openGroupManagementModal(resosBookingId, hotelBookingId, date);
+    }
+
+    /**
+     * Open group management modal
+     */
+    async function openGroupManagementModal(resosBookingId, hotelBookingId, date) {
+        const modal = document.getElementById('group-management-modal');
+        if (!modal) {
+            console.error('NAWABookingInteractions: Group management modal not found');
+            return;
+        }
+
+        // Store state
+        window.GROUP_MODAL_STATE = {
+            resosBookingId: resosBookingId,
+            hotelBookingId: hotelBookingId,
+            date: date,
+            bookings: [],
+            leadBookingId: hotelBookingId
+        };
+
+        // Show modal
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+
+        // Load bookings for date
+        try {
+            const loading = modal.querySelector('.group-modal-loading');
+            const container = modal.querySelector('.group-bookings-container');
+            const error = modal.querySelector('.group-modal-error');
+
+            if (loading) loading.style.display = 'block';
+            if (container) container.style.display = 'none';
+            if (error) error.style.display = 'none';
+
+            // Call API to get bookings for date
+            const response = await fetch(nawaSettings.apiUrl + 'bookings/for-date?date=' + date, {
+                method: 'GET',
+                headers: {
+                    'X-WP-Nonce': nawaSettings.nonce
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                window.GROUP_MODAL_STATE.bookings = data.bookings || [];
+                renderGroupModal();
+                if (loading) loading.style.display = 'none';
+                if (container) container.style.display = 'block';
+            } else {
+                throw new Error(data.message || 'Failed to load bookings');
+            }
+        } catch (err) {
+            console.error('NAWABookingInteractions: Error loading group modal:', err);
+            const loading = modal.querySelector('.group-modal-loading');
+            const error = modal.querySelector('.group-modal-error');
+            if (loading) loading.style.display = 'none';
+            if (error) {
+                error.textContent = 'Error: ' + err.message;
+                error.style.display = 'block';
+            }
+        }
+    }
+
+    /**
+     * Render group management modal
+     */
+    function renderGroupModal() {
+        const container = document.querySelector('.group-bookings-container');
+        if (!container) return;
+
+        const bookings = window.GROUP_MODAL_STATE.bookings || [];
+
+        if (bookings.length === 0) {
+            container.innerHTML = '<p style="text-align: center; padding: 20px; color: #6b7280;">No bookings found for this date</p>';
+            return;
+        }
+
+        // Render bookings table
+        let html = '<table class="group-bookings-table"><thead><tr>';
+        html += '<th>Lead</th>';
+        html += '<th>Group</th>';
+        html += '<th>Booking</th>';
+        html += '</tr></thead><tbody>';
+
+        bookings.forEach(booking => {
+            html += '<tr>';
+
+            // Lead radio
+            html += '<td>';
+            const isLeadBooking = String(booking.booking_id) === String(window.GROUP_MODAL_STATE.leadBookingId);
+            const checkedAttr = isLeadBooking ? ' checked' : '';
+            html += `<input type="radio" name="lead-booking" value="${booking.booking_id}" class="lead-radio"${checkedAttr}>`;
+            html += '</td>';
+
+            // Group checkbox
+            html += '<td>';
+            const groupCheckedAttr = isLeadBooking ? ' checked' : '';
+            html += `<input type="checkbox" value="${booking.booking_id}" class="group-checkbox"${groupCheckedAttr}>`;
+            html += '</td>';
+
+            // Booking info
+            html += '<td>';
+            html += '<div class="booking-info-compact">';
+            html += `${booking.site_name || 'N/A'} - ${booking.guest_name || 'Guest'}`;
+            html += '</div>';
+            html += '</td>';
+
+            html += '</tr>';
+        });
+
+        html += '</tbody></table>';
+        container.innerHTML = html;
+
+        // Attach event listeners
+        attachGroupModalEventListeners();
+    }
+
+    /**
+     * Attach group modal event listeners
+     */
+    function attachGroupModalEventListeners() {
+        // Lead radio auto-checks group checkbox
+        document.querySelectorAll('.lead-radio').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (!e.target.checked) return;
+
+                const selectedLeadId = e.target.value;
+
+                // Update group checkboxes: lead must be checked
+                document.querySelectorAll('.group-checkbox').forEach(checkbox => {
+                    if (checkbox.value === selectedLeadId) {
+                        checkbox.checked = true;
+                    }
+                });
+            });
+        });
+
+        // Prevent unchecking the lead's group checkbox
+        document.querySelectorAll('.group-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('click', (e) => {
+                const leadRadio = e.target.closest('tr').querySelector('.lead-radio');
+                if (leadRadio && leadRadio.checked && !e.target.checked) {
+                    e.preventDefault();
+                    e.target.checked = true; // Force it to stay checked
+                    if (typeof NAWAApp !== 'undefined' && NAWAApp.showToast) {
+                        NAWAApp.showToast('Lead booking must be part of the group', 'info');
+                    }
+                }
+            });
+        });
+    }
+
+    /**
+     * Save group configuration
+     */
+    async function saveGroupConfiguration() {
+        const leadRadios = document.querySelectorAll('.lead-radio');
+        const groupCheckboxes = document.querySelectorAll('.group-checkbox');
+
+        // Get lead booking ID
+        let leadBookingId = null;
+        leadRadios.forEach(radio => {
+            if (radio.checked) {
+                leadBookingId = radio.value;
+            }
+        });
+
+        if (!leadBookingId) {
+            if (typeof NAWAApp !== 'undefined' && NAWAApp.showToast) {
+                NAWAApp.showToast('Please select a lead booking', 'error');
+            }
+            return;
+        }
+
+        // Get individual booking IDs that are checked
+        const individualIds = [];
+        groupCheckboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                individualIds.push(checkbox.value);
+            }
+        });
+
+        try {
+            // Call API to save group configuration
+            const response = await fetch(nawaSettings.apiUrl + 'bookings/group', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-WP-Nonce': nawaSettings.nonce
+                },
+                body: JSON.stringify({
+                    resos_booking_id: window.GROUP_MODAL_STATE.resosBookingId,
+                    lead_booking_id: leadBookingId,
+                    individual_ids: individualIds
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                if (typeof NAWAApp !== 'undefined' && NAWAApp.showToast) {
+                    NAWAApp.showToast('Group updated successfully!', 'success');
+                }
+                closeGroupManagementModal();
+                // Reload current tab
+                if (typeof NAWAApp !== 'undefined') {
+                    NAWAApp.refreshCurrentTab();
+                }
+            } else {
+                throw new Error(data.message || 'Failed to save group');
+            }
+        } catch (err) {
+            console.error('NAWABookingInteractions: Error saving group:', err);
+            if (typeof NAWAApp !== 'undefined' && NAWAApp.showToast) {
+                NAWAApp.showToast('Error: ' + err.message, 'error');
+            }
+        }
+    }
+
+    /**
+     * Close group management modal
+     */
+    function closeGroupManagementModal() {
+        const modal = document.getElementById('group-management-modal');
+        if (!modal) return;
+
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+
+        // Reset state
+        window.GROUP_MODAL_STATE = null;
+
+        console.log('NAWABookingInteractions: Group modal closed');
     }
 
     // Initialize on DOM ready
