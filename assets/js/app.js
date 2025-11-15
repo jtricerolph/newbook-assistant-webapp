@@ -286,6 +286,8 @@ const NAWAApp = (function() {
     // Public API
     return {
         init,
+        switchTab,
+        refreshCurrentTab,
         showLoading,
         showError,
         updateBadge,
