@@ -106,6 +106,8 @@ class NAWA_Booking_Module {
         // Create a mock WP_REST_Request with webapp-summary context
         $request = new WP_REST_Request('GET', '/bma/v1/summary');
         $request->set_param('context', 'webapp-summary');
+        $request->set_param('limit', 10); // Show 10 most recent bookings (default is 5)
+        $request->set_param('cancelled_hours', 48); // Show cancelled bookings from last 48 hours (default is 24)
 
         // Get response
         $response = $controller->get_summary($request);
