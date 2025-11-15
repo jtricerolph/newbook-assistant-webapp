@@ -283,6 +283,7 @@ class NAWA_Booking_Module {
         $controller = new BMA_REST_Controller();
         $request = new WP_REST_Request('GET', '/bma/v1/opening-hours');
         $request->set_param('date', $date);
+        $request->set_param('context', 'chrome-extension'); // Get HTML format
         $request->set_param('force_refresh', false); // Use cache to avoid rate limiting
 
         $response = $controller->get_opening_hours($request);
@@ -311,6 +312,7 @@ class NAWA_Booking_Module {
 
         $controller = new BMA_REST_Controller();
         $request = new WP_REST_Request('GET', '/bma/v1/dietary-choices');
+        $request->set_param('context', 'chrome-extension'); // Get HTML format
         $request->set_param('force_refresh', false); // Use cache to avoid rate limiting
 
         $response = $controller->get_dietary_choices($request);
@@ -352,6 +354,7 @@ class NAWA_Booking_Module {
         if ($opening_hour_id) {
             $request->set_param('opening_hour_id', $opening_hour_id);
         }
+        $request->set_param('context', 'chrome-extension'); // Get HTML format
         $request->set_param('force_refresh', false); // Use cache to avoid rate limiting
 
         $response = $controller->get_available_times($request);
@@ -387,6 +390,7 @@ class NAWA_Booking_Module {
         $controller = new BMA_REST_Controller();
         $request = new WP_REST_Request('GET', '/bma/v1/special-events');
         $request->set_param('date', $date);
+        $request->set_param('context', 'chrome-extension'); // Get HTML format
         $request->set_param('force_refresh', false); // Use cache to avoid rate limiting
 
         $response = $controller->get_special_events($request);
@@ -425,9 +429,9 @@ class NAWA_Booking_Module {
         $request = new WP_REST_Request('POST', '/bma/v1/comparison');
         $request->set_body_params(array(
             'resos_booking_id' => $resos_booking_id,
-            'hotel_booking_id' => $hotel_booking_id,
+            'booking_id' => $hotel_booking_id, // Use 'booking_id' not 'hotel_booking_id'
             'date' => $date,
-            'context' => 'webapp-restaurant',
+            'context' => 'chrome-extension', // Use chrome-extension context for HTML format
             'force_refresh' => false // Use cache to avoid rate limiting
         ));
 
