@@ -152,7 +152,9 @@ class NAWA_Core {
                 'displayName' => wp_get_current_user()->display_name
             ),
             'appName' => get_option('nawa_app_name', 'NewBook Assistant'),
-            'themeColor' => get_option('nawa_theme_color', '#1e3a8a')
+            'themeColor' => get_option('nawa_theme_color', '#1e3a8a'),
+            'serviceWorkerUrl' => home_url('/sw.js'),
+            'manifestUrl' => home_url('/manifest.json')
         ));
 
         // Load module-specific assets

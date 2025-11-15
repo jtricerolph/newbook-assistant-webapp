@@ -220,7 +220,10 @@ const NAWAApp = (function() {
      */
     function registerServiceWorker() {
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
+            const swUrl = nawaSettings.serviceWorkerUrl || '/sw.js';
+            navigator.serviceWorker.register(swUrl, {
+                scope: '/'
+            })
                 .then(registration => {
                     console.log('NAWAApp: Service worker registered:', registration);
                 })
