@@ -418,3 +418,676 @@
 .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
+
+/* ============================================
+   RESTAURANT TAB - FORMS
+   ============================================ */
+
+.date-section {
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.date-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.date-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.restaurant-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.restaurant-status.status-matched {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.restaurant-status.status-pending {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.restaurant-status.status-none {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.restaurant-status.group-highlight {
+    outline: 3px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* Create/Update Forms */
+.create-form,
+.update-form {
+    display: none;
+    background-color: #f9fafb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-top: 1rem;
+    border: 2px solid #e5e7eb;
+}
+
+.form-section {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    background-color: white;
+}
+
+.form-textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.form-checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.form-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: #374151;
+    cursor: pointer;
+}
+
+.form-checkbox {
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+}
+
+.form-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.feedback-message {
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    display: none;
+}
+
+.feedback-success {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #10b981;
+}
+
+.feedback-error {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #ef4444;
+}
+
+.feedback-info {
+    background-color: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #3b82f6;
+}
+
+/* Service Period Sections */
+.service-period-sections {
+    margin-top: 1rem;
+}
+
+.period-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background-color: #f3f4f6;
+    border-radius: 0.375rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.period-header:hover {
+    background-color: #e5e7eb;
+}
+
+.period-header.expanded {
+    background-color: #dbeafe;
+}
+
+.period-name {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.period-time-range {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.collapse-icon {
+    font-size: 1.25rem;
+    color: #6b7280;
+    transition: transform 0.2s;
+}
+
+.period-times {
+    display: none;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background-color: #f9fafb;
+    border-radius: 0.375rem;
+    margin-bottom: 0.75rem;
+}
+
+.time-slot-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    background-color: white;
+    color: #374151;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.time-slot-btn:hover:not(.time-slot-unavailable) {
+    background-color: #f3f4f6;
+    border-color: #3b82f6;
+}
+
+.time-slot-btn.selected {
+    background-color: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}
+
+.time-slot-btn.time-slot-unavailable {
+    opacity: 0.5;
+    cursor: not-allowed;
+    text-decoration: line-through;
+}
+
+/* Section Toggles */
+.bma-section-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background-color: #f3f4f6;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    margin-bottom: 0.75rem;
+    transition: background-color 0.2s;
+}
+
+.bma-section-toggle:hover {
+    background-color: #e5e7eb;
+}
+
+.bma-section-toggle .material-symbols-outlined {
+    transition: transform 0.2s;
+}
+
+.bma-collapsible-section {
+    display: none;
+    margin-bottom: 0.75rem;
+}
+
+/* ============================================
+   RESTAURANT TAB - GANTT CHART
+   ============================================ */
+
+.gantt-chart {
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+}
+
+.gantt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.gantt-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.gantt-timeline {
+    position: relative;
+    min-width: 600px;
+}
+
+.gantt-time-markers {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 0 0.5rem 0;
+    border-bottom: 2px solid #e5e7eb;
+    margin-bottom: 0.75rem;
+}
+
+.time-marker {
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.gantt-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.gantt-row {
+    position: relative;
+    height: 2.5rem;
+    background-color: #f9fafb;
+    border-radius: 0.25rem;
+    border: 1px solid #e5e7eb;
+}
+
+.gantt-booking-bar {
+    position: absolute;
+    height: 100%;
+    background-color: #3b82f6;
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    padding: 0 0.5rem;
+    font-size: 0.75rem;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.gantt-booking-bar:hover {
+    opacity: 0.8;
+}
+
+.gantt-booking-bar.is-resident {
+    background-color: #10b981;
+}
+
+.gantt-booking-tooltip {
+    position: fixed;
+    display: none;
+    z-index: 10000;
+    background: #1f2937;
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.8125rem;
+    pointer-events: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================
+   RESTAURANT TAB - COMPARISON VIEW
+   ============================================ */
+
+.comparison-section {
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-top: 1rem;
+    border: 2px solid #fbbf24;
+}
+
+.comparison-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.comparison-title {
+    font-weight: 600;
+    color: #92400e;
+}
+
+.comparison-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background-color: #fffbeb;
+    border-radius: 0.375rem;
+    margin-bottom: 0.75rem;
+}
+
+.comparison-row-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.comparison-row-content {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.resos-value {
+    padding: 0.5rem;
+    background-color: white;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+}
+
+.suggestion-text {
+    padding: 0.5rem;
+    background-color: #d1fae5;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    color: #065f46;
+    transition: opacity 0.2s;
+}
+
+.suggestion-checkbox {
+    width: 1.25rem;
+    height: 1.25rem;
+    cursor: pointer;
+}
+
+/* ============================================
+   STAYING TAB - FILTERS
+   ============================================ */
+
+.staying-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 0.5rem;
+}
+
+.stat-filter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 80px;
+}
+
+.stat-filter:hover {
+    background-color: #f3f4f6;
+    border-color: #3b82f6;
+}
+
+.stat-filter.active {
+    background-color: #dbeafe;
+    border-color: #3b82f6;
+    color: #1e40af;
+}
+
+.stat-number {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 0.25rem;
+    text-align: center;
+}
+
+.staying-card {
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.vacant-room-line {
+    background-color: #f3f4f6;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* ============================================
+   GROUP MANAGEMENT MODAL
+   ============================================ */
+
+.group-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.group-modal.hidden {
+    display: none;
+}
+
+.group-modal-content {
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.group-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.group-modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.close-group-modal {
+    padding: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #6b7280;
+    line-height: 1;
+}
+
+.close-group-modal:hover {
+    color: #1f2937;
+}
+
+.group-modal-loading,
+.group-modal-error {
+    text-align: center;
+    padding: 2rem;
+    color: #6b7280;
+}
+
+.group-modal-error {
+    color: #991b1b;
+    background-color: #fee2e2;
+    border-radius: 0.375rem;
+}
+
+.group-bookings-container {
+    margin-bottom: 1rem;
+}
+
+.group-bookings-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.group-bookings-table th {
+    text-align: left;
+    padding: 0.75rem;
+    background-color: #f3f4f6;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #374151;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.group-bookings-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.group-bookings-table tr:last-child td {
+    border-bottom: none;
+}
+
+.lead-radio,
+.group-checkbox {
+    width: 1.25rem;
+    height: 1.25rem;
+    cursor: pointer;
+}
+
+.booking-info-compact {
+    font-size: 0.875rem;
+    color: #1f2937;
+}
+
+.group-modal-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    padding-top: 1rem;
+    border-top: 2px solid #e5e7eb;
+}
+
+.save-group-config {
+    padding: 0.75rem 1.5rem;
+    background-color: #10b981;
+    color: white;
+    border: none;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.save-group-config:hover {
+    background-color: #059669;
+}
+
+/* ============================================
+   ACCORDION STATES
+   ============================================ */
+
+.booking-header {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.booking-header:hover {
+    background-color: #f9fafb;
+}
+
+.booking-details {
+    display: none;
+}
+
+.booking-details.expanded {
+    display: block;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.hidden {
+    display: none !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-1 {
+    margin-top: 0.5rem;
+}
+
+.mb-1 {
+    margin-bottom: 0.5rem;
+}
