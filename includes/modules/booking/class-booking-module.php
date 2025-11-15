@@ -85,6 +85,15 @@ class NAWA_Booking_Module {
             NAWA_VERSION,
             true
         );
+
+        // Enqueue booking interactions JS (Phase 1: Card accordion, navigation)
+        wp_enqueue_script(
+            'nawa-booking-interactions',
+            NAWA_PLUGIN_URL . 'assets/js/modules/booking-interactions.js',
+            array('nawa-app', 'nawa-booking-module'),
+            NAWA_VERSION,
+            true
+        );
     }
 
     /**
