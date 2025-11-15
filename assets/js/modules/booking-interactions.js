@@ -452,6 +452,11 @@ const NAWABookingInteractions = (function() {
                 const updateResosId = button.dataset.resosBookingId;
                 submitUpdateBooking(date, updateResosId);
                 break;
+            case 'view-comparison':
+                const comparisonResosId = button.dataset.resosBookingId;
+                const comparisonBookingId = button.dataset.bookingId;
+                viewComparison(date, comparisonResosId, comparisonBookingId);
+                break;
         }
     }
 
@@ -849,6 +854,62 @@ const NAWABookingInteractions = (function() {
             setTimeout(() => {
                 feedbackElement.style.display = 'none';
             }, 3000);
+        }
+    }
+
+    /**
+     * View comparison between ResOS booking and NewBook booking
+     */
+    async function viewComparison(date, resosBookingId, bookingId) {
+        const containerId = `comparison-${date}-${resosBookingId}`;
+        const container = document.getElementById(containerId);
+
+        if (!container) {
+            console.error('NAWABookingInteractions: Comparison container not found:', containerId);
+            return;
+        }
+
+        // Check if comparison is already loaded and visible
+        if (container.style.display === 'block') {
+            // Hide it (toggle behavior)
+            container.style.display = 'none';
+            return;
+        }
+
+        // Show loading state
+        container.style.display = 'block';
+        container.innerHTML = '<div class="bma-comparison-loading">Loading comparison...</div>';
+
+        try {
+            // Fetch comparison data from API
+            const response = await fetch(nawaSettings.apiUrl + 'bookings/compare', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-WP-Nonce': nawaSettings.nonce
+                },
+                body: JSON.stringify({
+                    resos_booking_id: resosBookingId,
+                    hotel_booking_id: bookingId,
+                    date: date,
+                    context: 'webapp-restaurant'
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success && data.html) {
+                container.innerHTML = data.html;
+                console.log('NAWABookingInteractions: Loaded comparison for', resosBookingId);
+
+                // Re-attach checkbox listeners for comparison checkboxes
+                attachComparisonCheckboxListeners();
+            } else {
+                container.innerHTML = `<div class="bma-comparison-error">Failed to load comparison: ${data.message || 'Unknown error'}</div>`;
+            }
+        } catch (error) {
+            console.error('NAWABookingInteractions: Error loading comparison:', error);
+            container.innerHTML = `<div class="bma-comparison-error">Error loading comparison: ${error.message}</div>`;
         }
     }
 

@@ -778,6 +778,29 @@
    RESTAURANT TAB - COMPARISON VIEW
    ============================================ */
 
+.bma-comparison-container {
+    margin-top: 1rem;
+}
+
+.bma-comparison-loading,
+.bma-comparison-error {
+    padding: 1rem;
+    text-align: center;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.bma-comparison-loading {
+    background-color: #f3f4f6;
+    color: #6b7280;
+}
+
+.bma-comparison-error {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #ef4444;
+}
+
 .comparison-section {
     background-color: white;
     border-radius: 0.5rem;
