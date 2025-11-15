@@ -108,7 +108,24 @@ function nawa_activate() {
     add_option('nawa_app_name', 'NewBook Assistant');
     add_option('nawa_theme_color', '#1e3a8a');
 
-    // Flush rewrite rules
+    // Initialize core to register rewrite rules BEFORE flushing
+    require_once NAWA_PLUGIN_DIR . 'includes/class-nawa-core.php';
+    require_once NAWA_PLUGIN_DIR . 'includes/class-nawa-pwa.php';
+    require_once NAWA_PLUGIN_DIR . 'includes/class-nawa-modules.php';
+    require_once NAWA_PLUGIN_DIR . 'includes/class-nawa-ajax.php';
+
+    // Register rewrite rules manually (normally done on 'init')
+    $slug = get_option('nawa_page_slug', 'assistant');
+    add_rewrite_rule('^' . $slug . '/?$', 'index.php?nawa_assistant=1', 'top');
+    add_rewrite_tag('%nawa_assistant%', '1');
+
+    // PWA rewrite rules
+    add_rewrite_rule('^manifest\.json$', 'index.php?nawa_manifest=1', 'top');
+    add_rewrite_tag('%nawa_manifest%', '1');
+    add_rewrite_rule('^sw\.js$', 'index.php?nawa_service_worker=1', 'top');
+    add_rewrite_tag('%nawa_service_worker%', '1');
+
+    // NOW flush rewrite rules (with rules registered)
     flush_rewrite_rules();
 }
 register_activation_hook(__FILE__, 'nawa_activate');

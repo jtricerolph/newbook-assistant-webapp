@@ -62,6 +62,11 @@ class NAWA_PWA {
             return;
         }
 
+        // Clean output buffer to prevent any stray output
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+
         $app_name = get_option('nawa_app_name', 'NewBook Assistant');
         $theme_color = get_option('nawa_theme_color', '#1e3a8a');
         $slug = get_option('nawa_page_slug', 'assistant');
@@ -93,10 +98,15 @@ class NAWA_PWA {
             'screenshots' => array()
         );
 
-        header('Content-Type: application/manifest+json');
+        // Prevent caching and set proper headers
+        header('Content-Type: application/manifest+json; charset=utf-8');
         header('Service-Worker-Allowed: /');
+        header('Cache-Control: no-cache, must-revalidate');
+        header('X-Robots-Tag: none');
+
+        // Output JSON and exit immediately
         echo json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        exit;
+        die(); // Use die() instead of exit to ensure complete termination
     }
 
     /**
@@ -107,21 +117,29 @@ class NAWA_PWA {
             return;
         }
 
+        // Clean output buffer to prevent any stray output
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+
         $sw_file = NAWA_PLUGIN_DIR . 'assets/js/service-worker.js';
 
+        // Set proper headers for service worker
+        header('Content-Type: application/javascript; charset=utf-8');
+        header('Service-Worker-Allowed: /');
+        header('Cache-Control: no-cache, must-revalidate');
+        header('X-Robots-Tag: none');
+
         if (file_exists($sw_file)) {
-            header('Content-Type: application/javascript');
-            header('Service-Worker-Allowed: /');
             readfile($sw_file);
         } else {
             // Serve minimal service worker if file doesn't exist
-            header('Content-Type: application/javascript');
             echo "// Service worker placeholder\n";
             echo "self.addEventListener('install', (event) => { self.skipWaiting(); });\n";
             echo "self.addEventListener('activate', (event) => { event.waitUntil(clients.claim()); });\n";
         }
 
-        exit;
+        die(); // Use die() instead of exit to ensure complete termination
     }
 
     /**

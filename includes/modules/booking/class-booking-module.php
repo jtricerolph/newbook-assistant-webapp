@@ -93,14 +93,24 @@ class NAWA_Booking_Module {
     public function ajax_summary() {
         check_ajax_referer('nawa_nonce', 'nonce');
 
-        // Call booking-match-api endpoint with webapp-summary context
-        $api_url = rest_url('bma/v1/summary');
-        $api_url = add_query_arg('context', 'webapp-summary', $api_url);
+        // Check if booking-match-api is available
+        if (!class_exists('BMA_REST_Controller')) {
+            wp_send_json_error(array(
+                'message' => 'Booking Match API not available'
+            ));
+        }
 
-        $response = wp_remote_get($api_url, array(
-            'cookies' => $_COOKIE // Pass along authentication
-        ));
+        // Call the REST controller directly (same WordPress installation)
+        $controller = new BMA_REST_Controller();
 
+        // Create a mock WP_REST_Request with webapp-summary context
+        $request = new WP_REST_Request('GET', '/bma/v1/summary');
+        $request->set_param('context', 'webapp-summary');
+
+        // Get response
+        $response = $controller->get_summary($request);
+
+        // Return as JSON
         if (is_wp_error($response)) {
             wp_send_json_error(array(
                 'message' => 'Failed to fetch summary data',
@@ -108,10 +118,7 @@ class NAWA_Booking_Module {
             ));
         }
 
-        $body = wp_remote_retrieve_body($response);
-        $data = json_decode($body, true);
-
-        wp_send_json($data);
+        wp_send_json($response);
     }
 
     /**
@@ -126,20 +133,27 @@ class NAWA_Booking_Module {
             wp_send_json_error(array('message' => 'No booking ID provided'));
         }
 
-        // Call booking-match-api endpoint with webapp-restaurant context
-        $api_url = rest_url('bma/v1/bookings/match');
+        // Check if booking-match-api is available
+        if (!class_exists('BMA_REST_Controller')) {
+            wp_send_json_error(array(
+                'message' => 'Booking Match API not available'
+            ));
+        }
 
-        $response = wp_remote_post($api_url, array(
-            'cookies' => $_COOKIE,
-            'body' => json_encode(array(
-                'booking_id' => $booking_id,
-                'context' => 'webapp-restaurant'
-            )),
-            'headers' => array(
-                'Content-Type' => 'application/json'
-            )
+        // Call the REST controller directly (same WordPress installation)
+        $controller = new BMA_REST_Controller();
+
+        // Create a mock WP_REST_Request
+        $request = new WP_REST_Request('POST', '/bma/v1/bookings/match');
+        $request->set_body_params(array(
+            'booking_id' => $booking_id,
+            'context' => 'webapp-restaurant'
         ));
 
+        // Get response
+        $response = $controller->match_booking($request);
+
+        // Return as JSON
         if (is_wp_error($response)) {
             wp_send_json_error(array(
                 'message' => 'Failed to fetch restaurant matches',
@@ -147,10 +161,7 @@ class NAWA_Booking_Module {
             ));
         }
 
-        $body = wp_remote_retrieve_body($response);
-        $data = json_decode($body, true);
-
-        wp_send_json($data);
+        wp_send_json($response);
     }
 
     /**
@@ -165,14 +176,24 @@ class NAWA_Booking_Module {
             wp_send_json_error(array('message' => 'No booking ID provided'));
         }
 
-        // Call booking-match-api endpoint with webapp-checks context
-        $api_url = rest_url('bma/v1/checks/' . $booking_id);
-        $api_url = add_query_arg('context', 'webapp-checks', $api_url);
+        // Check if booking-match-api is available
+        if (!class_exists('BMA_REST_Controller')) {
+            wp_send_json_error(array(
+                'message' => 'Booking Match API not available'
+            ));
+        }
 
-        $response = wp_remote_get($api_url, array(
-            'cookies' => $_COOKIE
-        ));
+        // Call the REST controller directly (same WordPress installation)
+        $controller = new BMA_REST_Controller();
 
+        // Create a mock WP_REST_Request
+        $request = new WP_REST_Request('GET', '/bma/v1/checks/' . $booking_id);
+        $request->set_param('context', 'webapp-checks');
+
+        // Get response
+        $response = $controller->get_checks($request);
+
+        // Return as JSON
         if (is_wp_error($response)) {
             wp_send_json_error(array(
                 'message' => 'Failed to fetch checks data',
@@ -180,9 +201,6 @@ class NAWA_Booking_Module {
             ));
         }
 
-        $body = wp_remote_retrieve_body($response);
-        $data = json_decode($body, true);
-
-        wp_send_json($data);
+        wp_send_json($response);
     }
 }
