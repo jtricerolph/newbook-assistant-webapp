@@ -1,0 +1,420 @@
+/**
+ * Booking Module Styles
+ * Mobile-optimized styles for booking assistant content
+ */
+
+/* ============================================
+   BOOKING CARDS
+   ============================================ */
+
+.bma-booking-card {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.bma-booking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.bma-booking-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+}
+
+.bma-booking-subtitle {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0.25rem 0 0 0;
+}
+
+/* ============================================
+   BOOKING DETAILS
+   ============================================ */
+
+.bma-booking-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.bma-detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.bma-detail-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.bma-detail-value {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #1f2937;
+}
+
+/* ============================================
+   NIGHTS / MATCHES
+   ============================================ */
+
+.bma-nights-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.bma-night-item {
+    background-color: #f9fafb;
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+    border-left: 3px solid #e5e7eb;
+}
+
+.bma-night-item.has-match {
+    border-left-color: #10b981; /* Green */
+}
+
+.bma-night-item.has-warning {
+    border-left-color: #f59e0b; /* Amber */
+}
+
+.bma-night-item.has-error {
+    border-left-color: #ef4444; /* Red */
+}
+
+.bma-night-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.bma-night-date {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.bma-night-status {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.bma-night-status.status-ok {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.bma-night-status.status-warning {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.bma-night-status.status-error {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* ============================================
+   MATCH ITEMS
+   ============================================ */
+
+.bma-match-item {
+    background-color: white;
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    border: 1px solid #e5e7eb;
+}
+
+.bma-match-item.primary-match {
+    border-color: #10b981;
+    border-width: 2px;
+}
+
+.bma-match-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 0.5rem;
+}
+
+.bma-match-guest-name {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.bma-match-time {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.bma-match-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.bma-match-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background-color: #f3f4f6;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.bma-match-badge.badge-primary {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.bma-match-badge.badge-success {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.bma-match-badge.badge-warning {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+/* ============================================
+   CONFIDENCE INDICATORS
+   ============================================ */
+
+.bma-confidence {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.bma-confidence.confidence-high {
+    color: #059669;
+}
+
+.bma-confidence.confidence-medium {
+    color: #d97706;
+}
+
+.bma-confidence.confidence-low {
+    color: #dc2626;
+}
+
+/* ============================================
+   ACTIONS
+   ============================================ */
+
+.bma-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.bma-btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    background-color: white;
+    color: #374151;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    touch-action: manipulation;
+}
+
+.bma-btn:active {
+    transform: scale(0.98);
+}
+
+.bma-btn-primary {
+    background-color: #2563eb;
+    color: white;
+    border-color: #2563eb;
+}
+
+.bma-btn-success {
+    background-color: #10b981;
+    color: white;
+    border-color: #10b981;
+}
+
+.bma-btn-warning {
+    background-color: #f59e0b;
+    color: white;
+    border-color: #f59e0b;
+}
+
+/* ============================================
+   SUMMARY VIEW SPECIFIC
+   ============================================ */
+
+.bma-summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 0.5rem;
+}
+
+.bma-summary-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.bma-summary-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.bma-stat-card {
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+.bma-stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.bma-stat-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 0.25rem;
+}
+
+/* ============================================
+   CHECKS VIEW SPECIFIC
+   ============================================ */
+
+.bma-check-item {
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    border-left: 3px solid #e5e7eb;
+}
+
+.bma-check-item.check-pass {
+    border-left-color: #10b981;
+}
+
+.bma-check-item.check-warning {
+    border-left-color: #f59e0b;
+}
+
+.bma-check-item.check-fail {
+    border-left-color: #ef4444;
+}
+
+.bma-check-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.bma-check-description {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* ============================================
+   EMPTY STATES
+   ============================================ */
+
+.bma-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.bma-empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.bma-empty-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.bma-empty-text {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (min-width: 640px) {
+    .bma-booking-card {
+        padding: 1.5rem;
+    }
+
+    .bma-booking-title {
+        font-size: 1.25rem;
+    }
+
+    .bma-booking-details {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* ============================================
+   MATERIAL SYMBOLS
+   ============================================ */
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}

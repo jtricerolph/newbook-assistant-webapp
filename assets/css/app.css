@@ -1,0 +1,425 @@
+/**
+ * NewBook Assistant Web App - Main Styles
+ * Mobile-first, touch-friendly design
+ */
+
+/* ============================================
+   RESET & BASE STYLES
+   ============================================ */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+}
+
+.nawa-body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #1f2937;
+    background-color: #f3f4f6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   APP CONTAINER
+   ============================================ */
+
+.nawa-app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-height: -webkit-fill-available; /* iOS Safari fix */
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.nawa-header {
+    flex-shrink: 0;
+    background-color: #1e3a8a;
+    color: white;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nawa-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nawa-app-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.nawa-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nawa-user-menu {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nawa-user-name {
+    font-size: 0.875rem;
+    display: none; /* Hide on mobile */
+}
+
+.nawa-logout-link {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+.nawa-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    border: none;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.nawa-btn:active {
+    transform: scale(0.95);
+}
+
+.nawa-btn .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+.nawa-btn-primary {
+    background-color: #2563eb;
+    color: white;
+}
+
+.nawa-btn-primary:hover {
+    background-color: #1d4ed8;
+}
+
+/* ============================================
+   MODULE SELECTOR
+   ============================================ */
+
+.nawa-module-selector {
+    flex-shrink: 0;
+    padding: 1rem;
+    background-color: white;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.nawa-module-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.5rem;
+}
+
+.nawa-module-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    touch-action: manipulation;
+}
+
+.nawa-module-btn:active,
+.nawa-module-btn.active {
+    border-color: #2563eb;
+    background-color: #eff6ff;
+}
+
+.nawa-module-btn .material-symbols-outlined {
+    font-size: 2rem;
+    color: #2563eb;
+}
+
+.nawa-module-btn span:not(.material-symbols-outlined) {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* ============================================
+   TAB NAVIGATION
+   ============================================ */
+
+.nawa-tab-nav {
+    flex-shrink: 0;
+    display: flex;
+    background-color: white;
+    border-bottom: 2px solid #e5e7eb;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.nawa-tab-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.nawa-tab-btn {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-bottom: 3px solid transparent;
+    background-color: white;
+    color: #6b7280;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    touch-action: manipulation;
+    white-space: nowrap;
+}
+
+.nawa-tab-btn.active {
+    color: #2563eb;
+    border-bottom-color: #2563eb;
+}
+
+.nawa-tab-btn .material-symbols-outlined {
+    font-size: 1.5rem;
+}
+
+/* Badge */
+.nawa-badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.25rem;
+    background-color: #ef4444;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 0.625rem;
+}
+
+/* ============================================
+   CONTENT AREA
+   ============================================ */
+
+.nawa-content {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    background-color: #f3f4f6;
+    padding: 1rem;
+}
+
+/* Loading state */
+.nawa-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 1rem;
+    color: #6b7280;
+}
+
+.nawa-spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 4px solid #e5e7eb;
+    border-top-color: #2563eb;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Error state */
+.nawa-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 1rem;
+    color: #ef4444;
+}
+
+.nawa-error .material-symbols-outlined {
+    font-size: 4rem;
+}
+
+/* ============================================
+   BOTTOM NAVIGATION (Mobile)
+   ============================================ */
+
+.nawa-bottom-nav {
+    display: none; /* Hidden by default, shown on small screens */
+    flex-shrink: 0;
+    background-color: white;
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 640px) {
+    .nawa-tab-nav {
+        display: none; /* Hide top tabs on mobile */
+    }
+
+    .nawa-bottom-nav {
+        display: flex; /* Show bottom tabs on mobile */
+    }
+
+    .nawa-user-name {
+        display: none !important; /* Always hide user name on mobile */
+    }
+}
+
+/* ============================================
+   BOOKING SEARCH
+   ============================================ */
+
+.nawa-booking-search {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 1.5rem;
+    padding: 2rem;
+}
+
+.nawa-search-icon .material-symbols-outlined {
+    font-size: 4rem;
+    color: #9ca3af;
+}
+
+.nawa-booking-search h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.nawa-booking-search form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 20rem;
+}
+
+.nawa-booking-search input {
+    padding: 0.75rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.nawa-booking-search input:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+.nawa-booking-search button {
+    justify-content: center;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (min-width: 640px) {
+    .nawa-app-title {
+        font-size: 1.5rem;
+    }
+
+    .nawa-user-name {
+        display: inline; /* Show user name on larger screens */
+    }
+
+    .nawa-content {
+        padding: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .nawa-content {
+        padding: 2rem;
+    }
+}
+
+/* ============================================
+   TOUCH IMPROVEMENTS
+   ============================================ */
+
+/* Larger touch targets */
+@media (pointer: coarse) {
+    .nawa-tab-btn,
+    .nawa-module-btn {
+        min-height: 48px;
+    }
+
+    .nawa-btn {
+        min-height: 44px;
+    }
+}
+
+/* ============================================
+   PWA SPECIFIC STYLES
+   ============================================ */
+
+/* Hide when running as installed app */
+@media (display-mode: standalone) {
+    .nawa-btn-install {
+        display: none !important;
+    }
+}
+
+/* Safe area insets for notched devices */
+@supports (padding: env(safe-area-inset-bottom)) {
+    .nawa-bottom-nav {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
