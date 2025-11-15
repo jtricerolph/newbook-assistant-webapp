@@ -409,7 +409,7 @@ class NAWA_Booking_Module {
         }
 
         $controller = new BMA_REST_Controller();
-        $request = new WP_REST_Request('POST', '/bma/v1/bookings/compare');
+        $request = new WP_REST_Request('POST', '/bma/v1/comparison');
         $request->set_body_params(array(
             'resos_booking_id' => $resos_booking_id,
             'hotel_booking_id' => $hotel_booking_id,
@@ -417,7 +417,7 @@ class NAWA_Booking_Module {
             'context' => 'webapp-restaurant'
         ));
 
-        $response = $controller->compare_booking($request);
+        $response = $controller->get_comparison($request);
 
         if (is_wp_error($response)) {
             wp_send_json_error(array(
