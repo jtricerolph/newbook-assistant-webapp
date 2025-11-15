@@ -59,8 +59,8 @@ class NAWA_Core {
         // Load PWA handler
         new NAWA_PWA();
 
-        // Load module system
-        $module_system = new NAWA_Modules();
+        // Load module system (singleton)
+        $module_system = NAWA_Modules::instance();
 
         // Load AJAX handler
         new NAWA_AJAX();

@@ -16,14 +16,29 @@ if (!defined('ABSPATH')) {
 class NAWA_Modules {
 
     /**
+     * Singleton instance
+     */
+    private static $instance = null;
+
+    /**
      * Registered modules
      */
     private static $modules = array();
 
     /**
+     * Get singleton instance
+     */
+    public static function instance() {
+        if (null === self::$instance) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    /**
      * Constructor
      */
-    public function __construct() {
+    private function __construct() {
         add_action('wp_ajax_nawa_get_modules', array($this, 'ajax_get_modules'));
     }
 

@@ -209,38 +209,58 @@ const NAWABookingModule = (function() {
 
                 if (bookingId) {
                     setCurrentBooking(bookingId);
+
+                    // Reload current tab to show results for this booking
+                    const currentTab = NAWAApp.getCurrentTab();
+                    if (currentTab) {
+                        handleTabChange({
+                            detail: {
+                                module: 'booking',
+                                tab: currentTab
+                            }
+                        });
+                    }
                 }
             });
         }
     }
 
     /**
-     * Set current booking ID and reload tab
+     * Set current booking ID
+     * Note: Does not automatically reload tabs - caller should handle tab switching/loading
      */
     function setCurrentBooking(bookingId) {
         console.log('NAWABookingModule: Setting current booking:', bookingId);
         currentBookingId = bookingId;
-
-        // Reload current tab with new booking
-        const currentTab = NAWAApp.getCurrentTab();
-        if (currentTab) {
-            handleTabChange({
-                detail: {
-                    module: 'booking',
-                    tab: currentTab
-                }
-            });
-        }
     }
 
     /**
      * Display content in main content area
+     * Handles inline scripts properly (they don't execute with innerHTML)
      */
     function displayContent(html) {
         const content = document.getElementById('nawa-content');
-        if (content) {
-            content.innerHTML = html;
-        }
+        if (!content) return;
+
+        // Set the HTML
+        content.innerHTML = html;
+
+        // Extract and execute inline scripts (innerHTML doesn't execute them)
+        const scripts = content.querySelectorAll('script');
+        scripts.forEach(oldScript => {
+            const newScript = document.createElement('script');
+
+            // Copy attributes
+            Array.from(oldScript.attributes).forEach(attr => {
+                newScript.setAttribute(attr.name, attr.value);
+            });
+
+            // Copy script content
+            newScript.textContent = oldScript.textContent;
+
+            // Replace old script with new one (this executes it)
+            oldScript.parentNode.replaceChild(newScript, oldScript);
+        });
     }
 
     // Initialize on DOM ready
