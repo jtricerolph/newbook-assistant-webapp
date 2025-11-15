@@ -186,9 +186,12 @@ class NAWA_Booking_Module {
             ));
         }
 
+        // Extract data from WP_REST_Response object
+        $data = $response instanceof WP_REST_Response ? $response->get_data() : $response;
+
         // Format response for webapp frontend
         wp_send_json_success(array(
-            'html' => isset($response['html']) ? $response['html'] : '',
+            'html' => isset($data['html']) ? $data['html'] : '',
             'badge_count' => 0 // Restaurant tab doesn't use badge count
         ));
     }
@@ -230,10 +233,13 @@ class NAWA_Booking_Module {
             ));
         }
 
+        // Extract data from WP_REST_Response object
+        $data = $response instanceof WP_REST_Response ? $response->get_data() : $response;
+
         // Format response for webapp frontend
         wp_send_json_success(array(
-            'html' => isset($response['html']) ? $response['html'] : '',
-            'badge_count' => isset($response['badge_count']) ? $response['badge_count'] : 0
+            'html' => isset($data['html']) ? $data['html'] : '',
+            'badge_count' => isset($data['badge_count']) ? $data['badge_count'] : 0
         ));
     }
 }
