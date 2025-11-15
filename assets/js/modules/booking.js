@@ -82,8 +82,8 @@ const NAWABookingModule = (function() {
             const data = await response.json();
 
             if (data.success) {
-                displayContent(data.html);
-                NAWAApp.updateBadge('summary', data.badge_count || 0);
+                displayContent(data.data.html);
+                NAWAApp.updateBadge('summary', data.data.badge_count || 0);
             } else {
                 NAWAApp.showError('Failed to load summary: ' + (data.message || 'Unknown error'));
             }
@@ -121,8 +121,8 @@ const NAWABookingModule = (function() {
             const data = await response.json();
 
             if (data.success) {
-                displayContent(data.html);
-                NAWAApp.updateBadge('restaurant', data.badge_count || 0);
+                displayContent(data.data.html);
+                NAWAApp.updateBadge('restaurant', data.data.badge_count || 0);
             } else {
                 NAWAApp.showError('Failed to load restaurant matches: ' + (data.message || 'Unknown error'));
             }
@@ -160,8 +160,8 @@ const NAWABookingModule = (function() {
             const data = await response.json();
 
             if (data.success) {
-                displayContent(data.html);
-                NAWAApp.updateBadge('checks', data.badge_count || 0);
+                displayContent(data.data.html);
+                NAWAApp.updateBadge('checks', data.data.badge_count || 0);
             } else {
                 NAWAApp.showError('Failed to load checks: ' + (data.message || 'Unknown error'));
             }
