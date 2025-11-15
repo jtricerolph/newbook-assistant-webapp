@@ -905,7 +905,8 @@ const NAWABookingInteractions = (function() {
                 // Re-attach checkbox listeners for comparison checkboxes
                 attachComparisonCheckboxListeners();
             } else {
-                container.innerHTML = `<div class="bma-comparison-error">Failed to load comparison: ${data.message || 'Unknown error'}</div>`;
+                const errorMessage = data.message || 'Unknown error';
+                container.innerHTML = `<div class="bma-comparison-error">Failed to load comparison: ${errorMessage}</div>`;
             }
         } catch (error) {
             console.error('NAWABookingInteractions: Error loading comparison:', error);

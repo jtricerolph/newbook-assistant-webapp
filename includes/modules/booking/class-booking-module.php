@@ -289,7 +289,8 @@ class NAWA_Booking_Module {
         }
 
         $data = $response instanceof WP_REST_Response ? $response->get_data() : $response;
-        wp_send_json_success($data);
+        // Return data as-is (BMA controller already formats it correctly)
+        wp_send_json($data);
     }
 
     /**
@@ -315,7 +316,8 @@ class NAWA_Booking_Module {
         }
 
         $data = $response instanceof WP_REST_Response ? $response->get_data() : $response;
-        wp_send_json_success($data);
+        // Return data as-is (BMA controller already formats it correctly)
+        wp_send_json($data);
     }
 
     /**
@@ -354,7 +356,8 @@ class NAWA_Booking_Module {
         }
 
         $data = $response instanceof WP_REST_Response ? $response->get_data() : $response;
-        wp_send_json_success($data);
+        // Return data as-is (BMA controller already formats it correctly)
+        wp_send_json($data);
     }
 
     /**
@@ -387,7 +390,8 @@ class NAWA_Booking_Module {
         }
 
         $data = $response instanceof WP_REST_Response ? $response->get_data() : $response;
-        wp_send_json_success($data);
+        // Return data as-is (BMA controller already formats it correctly)
+        wp_send_json($data);
     }
 
     /**
@@ -427,6 +431,7 @@ class NAWA_Booking_Module {
         }
 
         $data = $response instanceof WP_REST_Response ? $response->get_data() : $response;
-        wp_send_json_success($data);
+        // Return data as-is (BMA controller already formats it correctly)
+        wp_send_json($data);
     }
 }
