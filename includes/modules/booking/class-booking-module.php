@@ -118,7 +118,21 @@ class NAWA_Booking_Module {
             ));
         }
 
-        wp_send_json($response);
+        // Format response for webapp frontend (combine placed + cancelled HTML)
+        $html = '';
+        if (!empty($response['html_placed'])) {
+            $html .= $response['html_placed'];
+        }
+        if (!empty($response['html_cancelled'])) {
+            $html .= $response['html_cancelled'];
+        }
+
+        wp_send_json_success(array(
+            'html' => $html,
+            'badge_count' => isset($response['badge_count']) ? $response['badge_count'] : 0,
+            'placed_count' => isset($response['placed_count']) ? $response['placed_count'] : 0,
+            'cancelled_count' => isset($response['cancelled_count']) ? $response['cancelled_count'] : 0
+        ));
     }
 
     /**
@@ -161,7 +175,11 @@ class NAWA_Booking_Module {
             ));
         }
 
-        wp_send_json($response);
+        // Format response for webapp frontend
+        wp_send_json_success(array(
+            'html' => isset($response['html']) ? $response['html'] : '',
+            'badge_count' => 0 // Restaurant tab doesn't use badge count
+        ));
     }
 
     /**
@@ -201,6 +219,10 @@ class NAWA_Booking_Module {
             ));
         }
 
-        wp_send_json($response);
+        // Format response for webapp frontend
+        wp_send_json_success(array(
+            'html' => isset($response['html']) ? $response['html'] : '',
+            'badge_count' => isset($response['badge_count']) ? $response['badge_count'] : 0
+        ));
     }
 }
