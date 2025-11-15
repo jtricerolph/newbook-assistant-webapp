@@ -270,7 +270,7 @@ class NAWA_Booking_Module {
     public function ajax_opening_hours() {
         check_ajax_referer('nawa_nonce', 'nonce');
 
-        $date = isset($_GET['date']) ? sanitize_text_field($_GET['date']) : '';
+        $date = isset($_POST['date']) ? sanitize_text_field($_POST['date']) : '';
 
         if (!$date) {
             wp_send_json_error(array('message' => 'No date provided'));
@@ -333,9 +333,9 @@ class NAWA_Booking_Module {
     public function ajax_available_times() {
         check_ajax_referer('nawa_nonce', 'nonce');
 
-        $date = isset($_GET['date']) ? sanitize_text_field($_GET['date']) : '';
-        $people = isset($_GET['people']) ? intval($_GET['people']) : 2;
-        $opening_hour_id = isset($_GET['opening_hour_id']) ? sanitize_text_field($_GET['opening_hour_id']) : '';
+        $date = isset($_POST['date']) ? sanitize_text_field($_POST['date']) : '';
+        $people = isset($_POST['people']) ? intval($_POST['people']) : 2;
+        $opening_hour_id = isset($_POST['opening_hour_id']) ? sanitize_text_field($_POST['opening_hour_id']) : '';
 
         if (!$date) {
             wp_send_json_error(array('message' => 'No date provided'));
@@ -374,7 +374,7 @@ class NAWA_Booking_Module {
     public function ajax_special_events() {
         check_ajax_referer('nawa_nonce', 'nonce');
 
-        $date = isset($_GET['date']) ? sanitize_text_field($_GET['date']) : '';
+        $date = isset($_POST['date']) ? sanitize_text_field($_POST['date']) : '';
 
         if (!$date) {
             wp_send_json_error(array('message' => 'No date provided'));
