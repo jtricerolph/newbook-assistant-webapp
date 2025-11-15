@@ -25,6 +25,13 @@ class NAWA_Booking_Module {
         add_action('wp_ajax_nawa_booking_summary', array($this, 'ajax_summary'));
         add_action('wp_ajax_nawa_booking_restaurant', array($this, 'ajax_restaurant'));
         add_action('wp_ajax_nawa_booking_checks', array($this, 'ajax_checks'));
+
+        // Register AJAX handlers for ResOS API helpers
+        add_action('wp_ajax_nawa_opening_hours', array($this, 'ajax_opening_hours'));
+        add_action('wp_ajax_nawa_dietary_choices', array($this, 'ajax_dietary_choices'));
+        add_action('wp_ajax_nawa_available_times', array($this, 'ajax_available_times'));
+        add_action('wp_ajax_nawa_special_events', array($this, 'ajax_special_events'));
+        add_action('wp_ajax_nawa_booking_compare', array($this, 'ajax_booking_compare'));
     }
 
     /**
@@ -250,5 +257,176 @@ class NAWA_Booking_Module {
             'html' => isset($data['html']) ? $data['html'] : '',
             'badge_count' => isset($data['badge_count']) ? $data['badge_count'] : 0
         ));
+    }
+
+    /**
+     * AJAX: Get opening hours for a date
+     */
+    public function ajax_opening_hours() {
+        check_ajax_referer('nawa_nonce', 'nonce');
+
+        $date = isset($_GET['date']) ? sanitize_text_field($_GET['date']) : '';
+
+        if (!$date) {
+            wp_send_json_error(array('message' => 'No date provided'));
+        }
+
+        if (!class_exists('BMA_REST_Controller')) {
+            wp_send_json_error(array('message' => 'Booking Match API not available'));
+        }
+
+        $controller = new BMA_REST_Controller();
+        $request = new WP_REST_Request('GET', '/bma/v1/opening-hours');
+        $request->set_param('date', $date);
+
+        $response = $controller->get_opening_hours($request);
+
+        if (is_wp_error($response)) {
+            wp_send_json_error(array(
+                'message' => 'Failed to fetch opening hours',
+                'error' => $response->get_error_message()
+            ));
+        }
+
+        $data = $response instanceof WP_REST_Response ? $response->get_data() : $response;
+        wp_send_json_success($data);
+    }
+
+    /**
+     * AJAX: Get dietary choices
+     */
+    public function ajax_dietary_choices() {
+        check_ajax_referer('nawa_nonce', 'nonce');
+
+        if (!class_exists('BMA_REST_Controller')) {
+            wp_send_json_error(array('message' => 'Booking Match API not available'));
+        }
+
+        $controller = new BMA_REST_Controller();
+        $request = new WP_REST_Request('GET', '/bma/v1/dietary-choices');
+
+        $response = $controller->get_dietary_choices($request);
+
+        if (is_wp_error($response)) {
+            wp_send_json_error(array(
+                'message' => 'Failed to fetch dietary choices',
+                'error' => $response->get_error_message()
+            ));
+        }
+
+        $data = $response instanceof WP_REST_Response ? $response->get_data() : $response;
+        wp_send_json_success($data);
+    }
+
+    /**
+     * AJAX: Get available times
+     */
+    public function ajax_available_times() {
+        check_ajax_referer('nawa_nonce', 'nonce');
+
+        $date = isset($_GET['date']) ? sanitize_text_field($_GET['date']) : '';
+        $people = isset($_GET['people']) ? intval($_GET['people']) : 2;
+        $opening_hour_id = isset($_GET['opening_hour_id']) ? sanitize_text_field($_GET['opening_hour_id']) : '';
+
+        if (!$date) {
+            wp_send_json_error(array('message' => 'No date provided'));
+        }
+
+        if (!class_exists('BMA_REST_Controller')) {
+            wp_send_json_error(array('message' => 'Booking Match API not available'));
+        }
+
+        $controller = new BMA_REST_Controller();
+        $request = new WP_REST_Request('GET', '/bma/v1/available-times');
+        $request->set_param('date', $date);
+        $request->set_param('people', $people);
+        if ($opening_hour_id) {
+            $request->set_param('opening_hour_id', $opening_hour_id);
+        }
+
+        $response = $controller->get_available_times($request);
+
+        if (is_wp_error($response)) {
+            wp_send_json_error(array(
+                'message' => 'Failed to fetch available times',
+                'error' => $response->get_error_message()
+            ));
+        }
+
+        $data = $response instanceof WP_REST_Response ? $response->get_data() : $response;
+        wp_send_json_success($data);
+    }
+
+    /**
+     * AJAX: Get special events
+     */
+    public function ajax_special_events() {
+        check_ajax_referer('nawa_nonce', 'nonce');
+
+        $date = isset($_GET['date']) ? sanitize_text_field($_GET['date']) : '';
+
+        if (!$date) {
+            wp_send_json_error(array('message' => 'No date provided'));
+        }
+
+        if (!class_exists('BMA_REST_Controller')) {
+            wp_send_json_error(array('message' => 'Booking Match API not available'));
+        }
+
+        $controller = new BMA_REST_Controller();
+        $request = new WP_REST_Request('GET', '/bma/v1/special-events');
+        $request->set_param('date', $date);
+
+        $response = $controller->get_special_events($request);
+
+        if (is_wp_error($response)) {
+            wp_send_json_error(array(
+                'message' => 'Failed to fetch special events',
+                'error' => $response->get_error_message()
+            ));
+        }
+
+        $data = $response instanceof WP_REST_Response ? $response->get_data() : $response;
+        wp_send_json_success($data);
+    }
+
+    /**
+     * AJAX: Get booking comparison
+     */
+    public function ajax_booking_compare() {
+        check_ajax_referer('nawa_nonce', 'nonce');
+
+        $resos_booking_id = isset($_POST['resos_booking_id']) ? sanitize_text_field($_POST['resos_booking_id']) : '';
+        $hotel_booking_id = isset($_POST['hotel_booking_id']) ? intval($_POST['hotel_booking_id']) : 0;
+        $date = isset($_POST['date']) ? sanitize_text_field($_POST['date']) : '';
+
+        if (!$resos_booking_id || !$hotel_booking_id || !$date) {
+            wp_send_json_error(array('message' => 'Missing required parameters'));
+        }
+
+        if (!class_exists('BMA_REST_Controller')) {
+            wp_send_json_error(array('message' => 'Booking Match API not available'));
+        }
+
+        $controller = new BMA_REST_Controller();
+        $request = new WP_REST_Request('POST', '/bma/v1/bookings/compare');
+        $request->set_body_params(array(
+            'resos_booking_id' => $resos_booking_id,
+            'hotel_booking_id' => $hotel_booking_id,
+            'date' => $date,
+            'context' => 'webapp-restaurant'
+        ));
+
+        $response = $controller->compare_booking($request);
+
+        if (is_wp_error($response)) {
+            wp_send_json_error(array(
+                'message' => 'Failed to fetch comparison',
+                'error' => $response->get_error_message()
+            ));
+        }
+
+        $data = $response instanceof WP_REST_Response ? $response->get_data() : $response;
+        wp_send_json_success($data);
     }
 }
