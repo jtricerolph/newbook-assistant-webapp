@@ -161,7 +161,7 @@ class NAWA_PWA {
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
         <meta name="apple-mobile-web-app-title" content="<?php echo esc_attr($app_name); ?>">
         <meta name="theme-color" content="<?php echo esc_attr($theme_color); ?>">
-        <link rel="manifest" href="<?php echo home_url('/manifest.json'); ?>">
+        <link rel="manifest" href="<?php echo NAWA_PLUGIN_URL; ?>manifest.php">
         <link rel="apple-touch-icon" href="<?php echo NAWA_PLUGIN_URL; ?>assets/icons/icon-192x192.png">
         <?php
     }

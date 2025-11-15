@@ -1,0 +1,11 @@
+# NewBook Assistant Web App - Direct file access
+
+# Serve sw.php as sw.js
+<Files "sw.php">
+    ForceType application/javascript
+</Files>
+
+# Serve manifest.php as manifest.json
+<Files "manifest.php">
+    ForceType application/manifest+json
+</Files>

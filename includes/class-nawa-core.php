@@ -153,8 +153,8 @@ class NAWA_Core {
             ),
             'appName' => get_option('nawa_app_name', 'NewBook Assistant'),
             'themeColor' => get_option('nawa_theme_color', '#1e3a8a'),
-            'serviceWorkerUrl' => home_url('/sw.js'),
-            'manifestUrl' => home_url('/manifest.json')
+            'serviceWorkerUrl' => NAWA_PLUGIN_URL . 'sw.php',
+            'manifestUrl' => NAWA_PLUGIN_URL . 'manifest.php'
         ));
 
         // Load module-specific assets
