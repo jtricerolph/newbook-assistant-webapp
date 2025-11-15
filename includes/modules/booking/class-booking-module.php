@@ -86,6 +86,15 @@ class NAWA_Booking_Module {
             true
         );
 
+        // Enqueue ResOS API helpers (used by inline scripts in API HTML responses)
+        wp_enqueue_script(
+            'nawa-resos-api-helpers',
+            NAWA_PLUGIN_URL . 'assets/js/modules/resos-api-helpers.js',
+            array('nawa-app'),
+            NAWA_VERSION,
+            true
+        );
+
         // Enqueue booking interactions JS (Phase 1: Card accordion, navigation)
         wp_enqueue_script(
             'nawa-booking-interactions',
