@@ -133,6 +133,8 @@ class NAWA_Booking_Module {
         $request->set_param('context', 'webapp-summary');
         $request->set_param('limit', 10); // Show 10 most recent bookings (default is 5)
         $request->set_param('cancelled_hours', 48); // Show cancelled bookings from last 48 hours (default is 24)
+        $request->set_param('force_refresh', false); // Use cache to avoid rate limiting
+        $request->set_param('force_refresh_matches', false); // Use cache for matching data
 
         // Get response
         $response = $controller->get_summary($request);
@@ -188,7 +190,9 @@ class NAWA_Booking_Module {
         $request = new WP_REST_Request('POST', '/bma/v1/bookings/match');
         $request->set_body_params(array(
             'booking_id' => $booking_id,
-            'context' => 'webapp-restaurant'
+            'context' => 'webapp-restaurant',
+            'force_refresh' => false, // Use cache to avoid rate limiting
+            'force_refresh_matches' => false // Use cache for matching data
         ));
 
         // Get response
@@ -237,6 +241,7 @@ class NAWA_Booking_Module {
         // Create a mock WP_REST_Request
         $request = new WP_REST_Request('GET', '/bma/v1/checks/' . $booking_id);
         $request->set_param('context', 'webapp-checks');
+        $request->set_param('force_refresh', false); // Use cache to avoid rate limiting
 
         // Get response
         $response = $controller->get_checks($request);
@@ -278,6 +283,7 @@ class NAWA_Booking_Module {
         $controller = new BMA_REST_Controller();
         $request = new WP_REST_Request('GET', '/bma/v1/opening-hours');
         $request->set_param('date', $date);
+        $request->set_param('force_refresh', false); // Use cache to avoid rate limiting
 
         $response = $controller->get_opening_hours($request);
 
@@ -305,6 +311,7 @@ class NAWA_Booking_Module {
 
         $controller = new BMA_REST_Controller();
         $request = new WP_REST_Request('GET', '/bma/v1/dietary-choices');
+        $request->set_param('force_refresh', false); // Use cache to avoid rate limiting
 
         $response = $controller->get_dietary_choices($request);
 
@@ -345,6 +352,7 @@ class NAWA_Booking_Module {
         if ($opening_hour_id) {
             $request->set_param('opening_hour_id', $opening_hour_id);
         }
+        $request->set_param('force_refresh', false); // Use cache to avoid rate limiting
 
         $response = $controller->get_available_times($request);
 
@@ -379,6 +387,7 @@ class NAWA_Booking_Module {
         $controller = new BMA_REST_Controller();
         $request = new WP_REST_Request('GET', '/bma/v1/special-events');
         $request->set_param('date', $date);
+        $request->set_param('force_refresh', false); // Use cache to avoid rate limiting
 
         $response = $controller->get_special_events($request);
 
@@ -418,7 +427,8 @@ class NAWA_Booking_Module {
             'resos_booking_id' => $resos_booking_id,
             'hotel_booking_id' => $hotel_booking_id,
             'date' => $date,
-            'context' => 'webapp-restaurant'
+            'context' => 'webapp-restaurant',
+            'force_refresh' => false // Use cache to avoid rate limiting
         ));
 
         $response = $controller->get_comparison($request);
